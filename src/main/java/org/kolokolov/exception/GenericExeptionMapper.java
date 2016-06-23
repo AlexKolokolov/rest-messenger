@@ -7,6 +7,8 @@ import javax.ws.rs.ext.Provider;
 
 import org.kolokolov.model.ErrorMessage;
 
+//Uncomment annotation to make this mapper work
+//@Provider
 public class GenericExeptionMapper implements ExceptionMapper<Exception>{
 	
 	public GenericExeptionMapper() {
