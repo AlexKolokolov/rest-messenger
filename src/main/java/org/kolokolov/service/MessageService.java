@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.kolokolov.database.DataBaseClass;
-import org.kolokolov.exceptipn.DataNotFoundException;
+import org.kolokolov.exception.DataNotFoundException;
 import org.kolokolov.model.Message;
 
 public class MessageService {

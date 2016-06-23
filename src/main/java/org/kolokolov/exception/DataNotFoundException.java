@@ -1,4 +1,4 @@
-package org.kolokolov.exceptipn;
+package org.kolokolov.exception;
 
 public class DataNotFoundException extends RuntimeException {
 
