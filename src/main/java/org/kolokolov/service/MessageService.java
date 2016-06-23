@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.kolokolov.database.DataBaseClass;
+import org.kolokolov.exceptipn.DataNotFoundException;
 import org.kolokolov.model.Message;
 
 public class MessageService {
@@ -41,7 +42,9 @@ public class MessageService {
 	}
 	
 	public Message getMessage(Long id) {
-		return messages.get(id);
+		Message message = messages.get(id);
+		if (message == null) throw new DataNotFoundException("Message with id " + id + " not found");
+		return message;
 	}
 	
 	public Message addMessage(Message message) {
