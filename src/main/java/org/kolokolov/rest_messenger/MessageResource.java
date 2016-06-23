@@ -12,6 +12,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.kolokolov.model.Message;
 import org.kolokolov.service.MessageService;
@@ -41,8 +43,9 @@ public class MessageResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Message postMessage(Message message) {
-		return messageService.addMessage(message);
+	public Response postMessage(Message message) {
+		Message responseMessage = messageService.addMessage(message);
+		return Response.status(Status.CREATED).entity(responseMessage).build();
 	}
 	
 	@PUT
