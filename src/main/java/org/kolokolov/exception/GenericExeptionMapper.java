@@ -7,7 +7,6 @@ import javax.ws.rs.ext.Provider;
 
 import org.kolokolov.model.ErrorMessage;
 
-@Provider
 public class GenericExeptionMapper implements ExceptionMapper<Exception>{
 	
 	public GenericExeptionMapper() {
@@ -22,5 +21,4 @@ public class GenericExeptionMapper implements ExceptionMapper<Exception>{
 				entity(errorMessage).
 				build();
 	}
-
 }
