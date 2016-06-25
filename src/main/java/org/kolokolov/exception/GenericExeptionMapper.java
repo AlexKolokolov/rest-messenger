@@ -11,9 +11,7 @@ import org.kolokolov.model.ErrorMessage;
 //@Provider
 public class GenericExeptionMapper implements ExceptionMapper<Exception>{
 	
-	public GenericExeptionMapper() {
-		System.out.println("Mapper created");
-	}
+	public GenericExeptionMapper() {}
 
 	@Override
 	public Response toResponse(Exception exception) {

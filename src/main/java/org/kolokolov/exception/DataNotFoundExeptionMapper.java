@@ -10,8 +10,6 @@ import org.kolokolov.model.ErrorMessage;
 @Provider
 public class DataNotFoundExeptionMapper implements ExceptionMapper<DataNotFoundException>{
 	
-	
-
 	public DataNotFoundExeptionMapper() {}
 
 	@Override
