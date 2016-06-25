@@ -14,8 +14,8 @@ public class MessageService {
 	private Map<Long, Message> messages = DataBaseClass.getMessages();
 	
 	public MessageService() {
-		addMessage(new Message(1L, "Hello, world", "Kolokolov"));
-		addMessage(new Message(2L, "Hello, jersey", "Kolokolov"));
+		addMessage(new Message(1L, "Hello, world", "kolokolov"));
+		addMessage(new Message(2L, "Hello, jersey", "kolokolov"));
 	}
 	
 	public List<Message> getAllMessages() {

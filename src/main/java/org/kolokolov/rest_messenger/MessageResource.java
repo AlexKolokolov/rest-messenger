@@ -1,5 +1,6 @@
 package org.kolokolov.rest_messenger;
 
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.kolokolov.model.Message;
+import org.kolokolov.model.Profile;
 import org.kolokolov.service.MessageService;
 
 @Path("messages")
@@ -42,7 +44,13 @@ public class MessageResource {
 	public Message getMessage(@PathParam("messageId") long messageId, @Context UriInfo uriInfo) {
 		Message message = messageService.getMessage(messageId);
 		message.addLink(String.valueOf(uriInfo.getAbsolutePath()), "self");
+		message.addLink(getProfileUri(uriInfo, message), "profile");
 		return message;
+	}
+
+	private String getProfileUri(UriInfo uriInfo, Message message) {
+		URI uri = uriInfo.getBaseUriBuilder().path(ProfileResource.class).path(message.getAuthor()).build();
+		return String.valueOf(uri);
 	}
 	
 	@POST
