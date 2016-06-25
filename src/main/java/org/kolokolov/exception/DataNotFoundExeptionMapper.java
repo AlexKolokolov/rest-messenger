@@ -12,9 +12,7 @@ public class DataNotFoundExeptionMapper implements ExceptionMapper<DataNotFoundE
 	
 	
 
-	public DataNotFoundExeptionMapper() {
-		System.out.println("Mapper created");
-	}
+	public DataNotFoundExeptionMapper() {}
 
 	@Override
 	public Response toResponse(DataNotFoundException exception) {
