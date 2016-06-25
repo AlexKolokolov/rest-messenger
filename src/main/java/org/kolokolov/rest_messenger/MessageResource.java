@@ -28,7 +28,7 @@ public class MessageResource {
 	MessageService messageService = new MessageService();
 	
 	@GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(value={MediaType.APPLICATION_JSON, MediaType.TEXT_XML})
 	public List<Message> getMessages(@QueryParam("year") int year,
 									@QueryParam("start") int start,
 									@QueryParam("size") int size) {
@@ -39,7 +39,7 @@ public class MessageResource {
 	
 	@GET
 	@Path("/{messageId}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(value={MediaType.APPLICATION_JSON, MediaType.TEXT_XML})
 	public Message getMessage(@PathParam("messageId") long messageId, @Context UriInfo uriInfo) {
 		Message message = messageService.getMessage(messageId);
 		message.clearLinks();
