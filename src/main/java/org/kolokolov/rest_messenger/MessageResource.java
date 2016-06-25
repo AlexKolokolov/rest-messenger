@@ -39,8 +39,10 @@ public class MessageResource {
 	@GET
 	@Path("/{messageId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Message getMessage(@PathParam("messageId") long messageId) {
-		return messageService.getMessage(messageId);
+	public Message getMessage(@PathParam("messageId") long messageId, @Context UriInfo uriInfo) {
+		Message message = messageService.getMessage(messageId);
+		message.addLink(String.valueOf(uriInfo.getAbsolutePath()), "self");
+		return message;
 	}
 	
 	@POST
