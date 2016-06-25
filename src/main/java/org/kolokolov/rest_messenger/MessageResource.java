@@ -20,7 +20,6 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.kolokolov.model.Message;
-import org.kolokolov.model.Profile;
 import org.kolokolov.service.MessageService;
 
 @Path("messages")
@@ -43,9 +42,21 @@ public class MessageResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Message getMessage(@PathParam("messageId") long messageId, @Context UriInfo uriInfo) {
 		Message message = messageService.getMessage(messageId);
+		message.clearLinks();
 		message.addLink(String.valueOf(uriInfo.getAbsolutePath()), "self");
 		message.addLink(getProfileUri(uriInfo, message), "profile");
+		message.addLink(getCommentsUri(uriInfo, message), "comments");
 		return message;
+	}
+
+	private String getCommentsUri(UriInfo uriInfo, Message message) {
+		URI uri = uriInfo.getBaseUriBuilder().
+				path(MessageResource.class).
+				path(MessageResource.class, "getCommentResource").
+				resolveTemplate("messageId", message.getId()).
+				path(CommentResource.class).
+				build();
+		return String.valueOf(uri);
 	}
 
 	private String getProfileUri(UriInfo uriInfo, Message message) {

@@ -82,4 +82,8 @@ public class Message {
 	public void addLink(String url, String rel) {
 		links.add(new Link(url,rel));
 	}
+	
+	public void clearLinks() {
+		links.clear();
+	}
 }
