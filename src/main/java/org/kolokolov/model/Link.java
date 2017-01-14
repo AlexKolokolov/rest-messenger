@@ -5,12 +5,9 @@ public class Link {
 	private String url;
 	private String rel;
 	
-	
-	
 	public Link() {}
 
 	public Link(String link, String rel) {
-		super();
 		this.url = link;
 		this.rel = rel;
 	}

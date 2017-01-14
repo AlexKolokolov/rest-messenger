@@ -22,7 +22,6 @@ public class Message {
 	public Message() {}
 
 	public Message(long id, String message, String author) {
-		super();
 		this.id = id;
 		this.message = message;
 		this.author = author;

@@ -31,10 +31,16 @@ public class MessageResource {
     @Produces(value={MediaType.APPLICATION_JSON, MediaType.TEXT_XML})
 	public List<Message> getMessages(@QueryParam("year") int year,
 									@QueryParam("start") int start,
-									@QueryParam("size") int size) {
-		if (year > 0) return messageService.getAllMessagesByYear(year);
-		if (start > 0 || size > 0) return messageService.getAllMessagePaginated(start, size);
-		return messageService.getAllMessages();
+									@QueryParam("size") int size,
+									@Context UriInfo uriInfo) {
+	    List<Message> messages = null;
+		if (year > 0) messages = messageService.getAllMessagesByYear(year);
+		else if (start > 0 || size > 0) messages = messageService.getAllMessagePaginated(start, size);
+		else messages = messageService.getAllMessages();
+		for (Message message : messages) {
+		    fillMessageLinks(message, uriInfo);
+		}
+		return messages;
 	}
 	
 	@GET
@@ -42,20 +48,16 @@ public class MessageResource {
 	@Produces(value={MediaType.APPLICATION_JSON, MediaType.TEXT_XML})
 	public Message getMessage(@PathParam("messageId") long messageId, @Context UriInfo uriInfo) {
 		Message message = messageService.getMessage(messageId);
-		message.clearLinks();
-		message.addLink(String.valueOf(uriInfo.getAbsolutePath()), "self");
-		message.addLink(getProfileUri(uriInfo, message), "profile");
-		message.addLink(getCommentsUri(uriInfo, message), "comments");
+		fillMessageLinks(message, uriInfo);
 		return message;
 	}
 
 	private String getCommentsUri(UriInfo uriInfo, Message message) {
-		URI uri = uriInfo.getBaseUriBuilder().
-				path(MessageResource.class).
-				path(MessageResource.class, "getCommentResource").
-				resolveTemplate("messageId", message.getId()).
-				path(CommentResource.class).
-				build();
+		URI uri = uriInfo.getBaseUriBuilder()
+				.path(MessageResource.class)
+				.path(MessageResource.class, "getCommentResource")
+				.resolveTemplate("messageId", message.getId())
+				.build();
 		return String.valueOf(uri);
 	}
 
@@ -64,11 +66,27 @@ public class MessageResource {
 		return String.valueOf(uri);
 	}
 	
+	private String getMessageUri(UriInfo uriInfo, Message message) {
+        URI uri = uriInfo.getBaseUriBuilder().path(MessageResource.class)
+                .path(MessageResource.class, "getMessage")
+                .resolveTemplate("messageId", message.getId()).build();
+        return String.valueOf(uri);
+    }
+	
+	private void fillMessageLinks(Message message, UriInfo uriInfo) {
+	    if (message.getLinks().isEmpty()) {
+            message.addLink(getMessageUri(uriInfo, message), "self");
+            message.addLink(getProfileUri(uriInfo, message), "profile");
+            message.addLink(getCommentsUri(uriInfo, message), "comments");
+	    }
+	}
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response postMessage(Message message, @Context UriInfo uriInfo) throws URISyntaxException {
 		Message responseMessage = messageService.addMessage(message);
+		fillMessageLinks(responseMessage, uriInfo);
 		return Response.
 				created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(responseMessage.getId())).build()).
 				status(Status.CREATED).
